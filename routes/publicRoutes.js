@@ -18,9 +18,9 @@ router.get(init.routes.hello, (req, res) => {
  * and return it if authentication success
  * @return JSONWebtoken
  */
-router.get(init.routes.login, (req, res) => {
+router.post(init.routes.login, (req, res) => {
 
-    let userFromRequest = new User(req.query.email, req.query.password);
+    let userFromRequest = new User(req.body.email, req.body.password);
 
     jwt.sign(userFromRequest.toJson(), "secret", { expiresIn:"3h" }, (err, token) => {
                 
@@ -40,8 +40,11 @@ router.get(init.routes.login, (req, res) => {
                 }else{
                     res.status(403).send({"message" : init.message.authent.failure, error: init.message.authent.wrongUsernameOrPassword});
                 }
+
             }).catch((error) => {
-                res.status(404).send({"message" : init.message.authent.failure + " , " + error})
+
+                if(error = 404)
+                res.status(error.code).send({"message" : init.message.database.userNotFound})
             })
 
         }

@@ -12,7 +12,8 @@ module.exports = {
             wrongUsernameOrPassword: "utilisateur ou mot de passe inconnue"
         },
         database: {
-            userNotFound: "no user found with this user and password"
+            userNotFound: "no user found with this user and password",
+            userAlreadyExist: "this mail address already exist in database"
         }
     },
     

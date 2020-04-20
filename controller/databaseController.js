@@ -39,11 +39,12 @@ module.exports = {
             query.on('value', snapshot => {
                 
                 if(snapshot.val()){
+
                     let foundUser = snapshot.val();
                     let foundUserDocumentId = Object.keys(foundUser);
 
                     let userEmail = foundUser[foundUserDocumentId].email
-                    let userPassword = foundUser[foundUserDocumentId].email
+                    let userPassword = foundUser[foundUserDocumentId].password
 
                     let parsedFoundUser = {
                         email: userEmail,
@@ -51,7 +52,9 @@ module.exports = {
                     }
 
                     resolve(parsedFoundUser);
+
                 }else{
+
                     let error = init.message.database.userNotFound;
                     reject(error);
                 }
