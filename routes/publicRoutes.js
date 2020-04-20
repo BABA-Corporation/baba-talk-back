@@ -32,7 +32,7 @@ router.post(init.routes.login, (req, res) => {
         }else{
 
             //récupére l'user correspondant au mail
-            database.get('users', userFromRequest).then((userFromDatabase) => {
+            database.getUserByMail('users', userFromRequest).then((userFromDatabase) => {
 
                 //vérifie que le password passé en param est le même que le password en BDD
                 if(userFromRequest.match(userFromDatabase)){
@@ -57,23 +57,32 @@ router.post(init.routes.login, (req, res) => {
  * save user to database
  */
 router.post(init.routes.saveUser, (req, res) => {
-        
+
     let hashedPassword = require("crypto")
-    .createHmac("sha256", req.query.password)
+    .createHmac("sha256", req.body.password + req.body.email)
     .digest("hex");
     
-    let user = new User(req.query.email, hashedPassword);
+    let user = new User(req.body.email, hashedPassword);
 
-    database.save('users', user).then((result) => {
+    //vérifie si l'addresse mail n'existe pas déjà
+    database.getUserByMail('users', user).then((result) => {
+        
+        if(!result){
 
-        res.status(200).send({"utilisateur enregistré avec succès" : result});
+            database.save('users', user).then((result) => {
 
-    }).catch((error) => {
+                res.status(200).send({message: init.message.database.userSuccessfullySaved, user : result});
+        
+            }).catch((error) => {
+        
+                res.status(500).send({message: init.message.database.errorWhileSavingData, error: error});
+        
+            }) 
+        }else{
+            res.status(403).send({message: init.message.database.userAlreadyExist})
+        }  
 
-        res.status(500).send({message: "erreur lors de l'enregistrement de l'utilisateur", error: error});
-
-    })
-
+    });
 });
 
 module.exports = router;

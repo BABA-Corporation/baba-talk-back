@@ -12,8 +12,10 @@ module.exports = {
             wrongUsernameOrPassword: "utilisateur ou mot de passe inconnue"
         },
         database: {
+            userSuccessfullySaved: "utilisateur enregistré avec succès",
             userNotFound: "no user found with this user and password",
-            userAlreadyExist: "this mail address already exist in database"
+            userAlreadyExist: "this mail address already exist in database",
+            errorWhileSavingData: "erreur lors de l'enregistrement en base de donnée"
         }
     },
     

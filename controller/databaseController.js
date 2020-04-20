@@ -31,7 +31,7 @@ module.exports = {
     /**
      * research user with his email
      */
-    get: (collection, user) => {
+    getUserByMail: (collection, user) => {
         return new Promise((resolve, reject) => {
 
             let rootRef = admin.database().ref();
@@ -54,9 +54,7 @@ module.exports = {
                     resolve(parsedFoundUser);
 
                 }else{
-
-                    let error = init.message.database.userNotFound;
-                    reject(error);
+                    resolve(null);
                 }
                 
             })
