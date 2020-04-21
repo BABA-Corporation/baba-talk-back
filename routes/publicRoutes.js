@@ -32,19 +32,33 @@ router.post(init.routes.login, (req, res) => {
         }else{
 
             //récupére l'user correspondant au mail
-            database.getUserByMail('users', userFromRequest).then((userFromDatabase) => {
+            database.getUserByMail(userFromRequest).then((userFromDatabase) => {
 
                 //vérifie que le password passé en param est le même que le password en BDD
                 if(userFromRequest.match(userFromDatabase)){
-                    res.status(200).send({"message" : init.message.authent.sucess, "token" : token});
+
+                    let payload = {
+                        "message" : init.message.authent.sucess, 
+                        "token" : token, 
+                        "userId": userFromDatabase.id
+                    }
+
+                    res.status(200).send(payload);
+
                 }else{
-                    res.status(403).send({"message" : init.message.authent.failure, error: init.message.authent.wrongUsernameOrPassword});
+
+                    let payload = {
+                        "message" : init.message.authent.failure, 
+                        error: init.message.authent.wrongUsernameOrPassword
+                    }
+                    
+                    res.status(403).send(payload);
                 }
 
             }).catch((error) => {
 
                 if(error = 404)
-                res.status(error.code).send({"message" : init.message.database.userNotFound})
+                res.status(error).send({"message" : init.message.database.userNotFound})
             })
 
         }
@@ -56,30 +70,29 @@ router.post(init.routes.login, (req, res) => {
 /**
  * save user to database
  */
-router.post(init.routes.saveUser, (req, res) => {
+router.post(init.routes.user, (req, res) => {
 
-    let hashedPassword = require("crypto")
-    .createHmac("sha256", req.body.password + req.body.email)
-    .digest("hex");
-    
-    let user = new User(req.body.email, hashedPassword);
+    let user = new User(req.body.email, req.body.password, req.body.topics);
 
     //vérifie si l'addresse mail n'existe pas déjà
-    database.getUserByMail('users', user).then((result) => {
+    database.getUserByMail(user).then((result) => {
         
         if(!result){
 
-            database.save('users', user).then((result) => {
+            database.saveUser(user).then((userSaved) => {
 
-                res.status(200).send({message: init.message.database.userSuccessfullySaved, user : result});
+                res.status(200).send({message: init.message.database.userSuccessfullySaved, userId : userSaved.id});
         
             }).catch((error) => {
         
                 res.status(500).send({message: init.message.database.errorWhileSavingData, error: error});
         
-            }) 
+            });
+            
         }else{
+
             res.status(403).send({message: init.message.database.userAlreadyExist})
+
         }  
 
     });
