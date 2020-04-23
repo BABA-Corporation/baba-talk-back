@@ -11,7 +11,7 @@ router.post(init.routes.hello, (req, res) => {
 });
 
 /**
- * renvois tous les articles enregistré par un utilisateur
+ * renvois tous les articles en rapport avec tous les sujets enregistré par un utilisateur
  */
 router.get(routes.user + "/:userId" + routes.articles, async (req, res) => {
    //va cherche l'user avec son id;
@@ -24,7 +24,9 @@ router.get(routes.user + "/:userId" + routes.articles, async (req, res) => {
         for (let i = 0; i < userFounded.topics.length; i++) {
             const topic = userFounded.topics[i];
             let article = await gnews.getArticlesByTopic(topic);
-            articles.push(article);
+            let articlesPerTopic = {};
+            articlesPerTopic[topic] = article;
+            articles.push(articlesPerTopic);
         }
 
         res.status(200).send(articles);
@@ -33,7 +35,22 @@ router.get(routes.user + "/:userId" + routes.articles, async (req, res) => {
         res.status(404).send({message: init.message.database.userNotFound})
     }
     
+});
 
-})
+
+/**
+ * renvois les articles en rapport avec le sujet passé en paramètre
+ */
+router.get(routes.user + "/:userId" + routes.articles + "/:topic", async (req, res) => {
+
+    let topic = req.params.topic;
+
+    let article = await gnews.getArticlesByTopic(topic);
+    let articlesPerTopic = {};
+    articlesPerTopic[topic] = article;
+
+    res.status(200).send(articlesPerTopic);
+     
+});
 
 module.exports = router;

@@ -5,7 +5,7 @@ const init = require('../init/init');
 module.exports = {
 
     /**
-     * renvois les news en rapport avec les topic passé en paramètre 
+     * renvois les news en rapport avec le topic passé en paramètre 
      */
     getArticlesByTopic: async (topic) => {
 
