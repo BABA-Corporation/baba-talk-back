@@ -14,20 +14,30 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
     
-            // As an admin, the app has access to read and write all data, regardless of Security Rules
-            let db = admin.database();
-            let collection = 'users';
-
-            db.ref(collection).push(user)
-            .then(
-                res => resolve(user),
-                err => reject(err)
-            )
-
+            admin.database().ref('users/' + user.id).set(user).then((result) => {
+                resolve(result);
+            }).catch((error) => {
+                reject(error);
+            })
+            
         })
 
     },
 
+    updateUser: (userId, userToUpdate) => {
+
+        return new Promise((resolve, reject) => {
+
+        admin.database().ref('users/' + userId).set(userToUpdate, (error) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve('ok');
+                }
+            });
+        })
+            
+    },
 
     getUserById: (userId) => {
         return new Promise((resolve, reject) => {
@@ -70,7 +80,7 @@ module.exports = {
             let query = rootRef.child(collection).orderByChild('email').equalTo(user.email);
             query.on('value', snapshot => {
                 
-                if(snapshot.val()){
+                if(snapshot.exists()){
 
                     let foundUser = snapshot.val();
                     let foundUserDocumentId = Object.keys(foundUser);
