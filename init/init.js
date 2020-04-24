@@ -19,9 +19,11 @@ module.exports = {
         },
         database: {
             userSuccessfullySaved: "utilisateur enregistré avec succès",
+            userSuccessfullyUpdated: "utilisateur modifié avec succès",
             userNotFound: "no user found",
             userAlreadyExist: "this mail address already exist in database",
-            errorWhileSavingData: "erreur lors de l'enregistrement en base de donnée"
+            errorWhileSavingUser: "erreur lors de l'enregistrement en base de donnée",
+            errorWhileUpdatingUser: "erreur lors de l'update en base de donnée"
         }
     },
     
