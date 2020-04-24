@@ -56,7 +56,7 @@ router.post(init.routes.login, (req, res) => {
                 }
 
             }).catch((error) => {
-
+                console.log(error);
                 if(error = 404)
                 res.status(error).send({"message" : init.message.database.userNotFound})
             })
@@ -81,11 +81,12 @@ router.post(init.routes.user, (req, res) => {
 
             database.saveUser(user).then((userSaved) => {
 
-                res.status(200).send({message: init.message.database.userSuccessfullySaved, userId : userSaved.id});
+                res.status(200).send({message: init.message.database.userSuccessfullySaved, user : userSaved});
         
             }).catch((error) => {
         
-                res.status(500).send({message: init.message.database.errorWhileSavingData, error: error});
+                console.log(error);
+                res.status(500).send({message: init.message.database.errorWhileSavingUser, error: error.message});
         
             });
             
@@ -95,7 +96,9 @@ router.post(init.routes.user, (req, res) => {
 
         }  
 
-    });
+    }).catch((error) => {
+        res.status(500).send({message: init.message.database.errorWhileSavingUser, error: error.message});
+    })
 });
 
 module.exports = router;
