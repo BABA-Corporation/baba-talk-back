@@ -1,5 +1,10 @@
 module.exports = {
     serverPort: 3000,
+    ascii: {
+        top: "//////////",
+        body: " BABA-TALK-API ",
+        footer: "\\\\\\\\\\\\\\\\\\\\"
+    },
     gnewsApi: {
         key: "1f229736b16047d9bd6a9ed1447bb200",
         topHeadLineEndPoint: "https://newsapi.org/v2/top-headlines",
@@ -9,7 +14,8 @@ module.exports = {
         hello : "/hello",
         login : "/login",   
         user: "/user",
-        articles: "/articles"
+        articles: "/articles",
+        apiDoc : "/api-doc"
     },
     message : {
         authent:{
