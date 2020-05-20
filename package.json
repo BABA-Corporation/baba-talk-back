@@ -1,7 +1,7 @@
 {
-  "name": "api-gnews",
-  "version": "1.0.0",
-  "description": "",
+  "name": "baba-talk-back",
+  "version": "1.2.0",
+  "description": "API REST pour l'assistant et l'application web BABA Talk",
   "main": "server.js",
   "bin": {
     "api-gnews": "app.js"
@@ -23,9 +23,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://alexisbrunet34@bitbucket.org/alexisbrunet34/api-gnews.git"
+    "url": "git+https://gitlab.com/baba-corporation/baba-talk-back.git"
   },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/alexisbrunet34/api-gnews#readme"
+  "author": "BABA",
+  "license": "UNLICENSED"
 }

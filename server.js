@@ -6,7 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const express = require('express');
 const app =  express();
-var figlet = require('figlet');
+const figlet = require('figlet');
 
 app.use(init.routes.apiDoc, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('public'));
