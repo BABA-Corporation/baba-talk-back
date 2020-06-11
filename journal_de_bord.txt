@@ -1,14 +1,40 @@
-03/01 : 
+03/01 :
 lecture de la documentation de l'API de Google
-09/01 : 
-création de compte pour avoir une API key pour accéder à Google News	
+
+
+09/01 :
+création de compte pour avoir une API key pour accéder à Google News
 préparation des requêtes postman pour accéder à l'API Google News
+
+
 08/02:
 création des models et enregistrement en bdd (firebase) des users
+
+
 20/04:
 creation enregistrement et login d'un utilisateur
 mise en place des routes, base de donnée, controles ...
 cryptage du mot de passe
+
+
 23/04:
 essais d'écrire en Typescript
 céation de la route pour appeler google news et renvoyer les news des thèmes envoyés en pathParams
+
+30/04 :
+
+Création des routes pour création de user et login de user avec gestion des erreurs
+
+
+Création de route pour modifier les thèmes choisis par un utilisateur
+
+
+15/05 :
+
+Création de la route pour renvoyer les thèmes choisis par le user
+
+Création de la route pour renvoyer les articles de presses en rapport avec les thèmes choisis par l'utilisateur
+Ajouts de logs et affinage des messages et code http renvoyés par l'API
+
+17/05 :
+Création de la documentation swagger
