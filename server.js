@@ -1,6 +1,7 @@
 const init = require('./init/init');
 const router = require('./routes/router');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const express = require('express');
@@ -8,6 +9,9 @@ const app =  express();
 const figlet = require('figlet');
 
 app.use(init.routes.apiDoc, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(express.static('public'));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use("/",cors({origin : "*.baba.click"}), router);
 
