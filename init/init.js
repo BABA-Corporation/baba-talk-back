@@ -7,8 +7,8 @@ module.exports = {
     },
     gnewsApi: {
         key: "1f229736b16047d9bd6a9ed1447bb200",
-        topHeadLineEndPoint: "https://newsapi.org/v2/top-headlines",
-        everythingEndPoint: "https://newsapi.org/v2/everything"
+        topHeadLineEndPoint: "https://newsapi.org/v2/top-headlines?language=fr",
+        everythingEndPoint: "https://newsapi.org/v2/everything?language=fr"
     },
     routes : {
         hello : "/hello",
