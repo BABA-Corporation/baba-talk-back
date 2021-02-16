@@ -1,24 +1,37 @@
-const admin = require('firebase-admin');
-const serviceAccount = require("../init/open-innov-1c9f6-firebase-adminsdk-l8vg2-a6b656e3e5.json");
-
-
-// Initialize the app with a service account, granting admin privileges
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://open-innov-1c9f6.firebaseio.com"
-});
+let UserModel = require('../model/UserSchema');
+let init = require('../init/init');
+let mongoose = require('mongoose');
+const logger = require("./logger");
 
 module.exports = {
+
+    connect : () => {
+
+        return new Promise((resolve, reject) => {
+    
+          mongoose.Promise = global.Promise;    
+    
+          mongoose.connect(init.database.url, { useNewUrlParser: true, useUnifiedTopology: true })
+          .then(() =>{
+            logger.info("[databaseController][connect] - connected to database")
+            resolve("connected to database");
+          })
+          .catch((error) => {
+            logger.error("[databaseController][connect]" + error)
+            reject();
+          })
+        })
+    },
 
     saveUser: (user) => {
 
         return new Promise((resolve, reject) => {
-    
-            admin.database().ref('users/' + user.id).set(user).then((result) => {
-                resolve(result);
+            
+            UserModel.create(user).then((user) => {
+                resolve(user);
             }).catch((error) => {
                 reject(error);
-            })
+            });
             
         })
 
@@ -28,45 +41,28 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-        admin.database().ref('users/' + userId).set(userToUpdate, (error) => {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve('ok');
-                }
-            });
+            UserModel.findByIdAndUpdate(userId, userToUpdate).then((result) => {
+                resolve(result);
+            }).catch((error) => {
+                reject(error);
+            })
         })
             
     },
 
     getUserById: (userId) => {
         return new Promise((resolve, reject) => {
-            let collection = 'users';
-            let rootRef = admin.database().ref();
-            let query = rootRef.child(collection).orderByChild('id').equalTo(userId);
 
-            query.on('value', snapshot => {
-                if(snapshot.val()){
-                    let foundUser = snapshot.val();
-                    let foundUserDocumentId = Object.keys(foundUser);
+            if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
+                reject({code: 400, message : "incorrect id"});
+            }else{
 
-                    let userEmail = foundUser[foundUserDocumentId].email
-                    let userPassword = foundUser[foundUserDocumentId].password
-                    let id = foundUser[foundUserDocumentId].id;
-                    let topics = foundUser[foundUserDocumentId].topics;
-
-                    let parsedFoundUser = {
-                        email: userEmail,
-                        password: userPassword,
-                        id: id,
-                        topics: topics
-                    }
-                    resolve(parsedFoundUser);
-                }else{
-                    resolve(null);
-                }
-                
-            })
+                UserModel.findById(userId).then((user) => {
+                    resolve(user);
+                }).catch((error) => {
+                    reject({code: 500, message : error});
+                })
+            }
         })
     },
 
@@ -75,33 +71,17 @@ module.exports = {
      */
     getUserByMail: (user) => {
         return new Promise((resolve, reject) => {
-            let collection = 'users';
-            let rootRef = admin.database().ref();
-            let query = rootRef.child(collection).orderByChild('email').equalTo(user.email);
-            query.on('value', snapshot => {
-                
-                if(snapshot.exists()){
 
-                    let foundUser = snapshot.val();
-                    let foundUserDocumentId = Object.keys(foundUser);
-
-                    let userEmail = foundUser[foundUserDocumentId].email
-                    let userPassword = foundUser[foundUserDocumentId].password
-                    let id = foundUser[foundUserDocumentId].id;
-
-                    let parsedFoundUser = {
-                        email: userEmail,
-                        password: userPassword,
-                        id: id
-                    }
-
-                    resolve(parsedFoundUser);
-
-                }else{
-                    resolve(null);
+            UserModel.find({email:user.email}).then((result) => {
+                if(result.length > 1){
+                    logger.error("[databaseController][getUserByMail] - 2 user found with same email")
+                    reject("2 user found with same email")
                 }
-                
+                resolve(result[0]);
+            }).catch((error) => {
+                reject(error);
             })
+
         })        
     }
 

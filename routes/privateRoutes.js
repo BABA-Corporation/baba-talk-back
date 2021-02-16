@@ -16,27 +16,32 @@ router.post(init.routes.hello, (req, res) => {
  */
 router.get(routes.user + "/:userId" + routes.articles, async (req, res) => {
    //va cherche l'user avec son id;
-    let userFounded = await database.getUserById(req.params.userId);
-    if(userFounded){
+   database.getUserById(req.params.userId).then(async (userFounded) => {
 
-        //pour chaque topic du user, interroge gnews
-        let articles = [];
+        if(userFounded){
 
-        for (let i = 0; i < userFounded.topics.length; i++) {
-            
-            const topic = userFounded.topics[i];
-            let article = await gnews.getArticlesByTopic(topic);
-            let articlesPerTopic = {};
-            articlesPerTopic[topic] = article;
-            articles.push(articlesPerTopic);
-            
+            //pour chaque topic du user, interroge gnews
+            let articles = [];
+
+            for (let i = 0; i < userFounded.topics.length; i++) {
+                
+                const topic = userFounded.topics[i];
+                let article = await gnews.getArticlesByTopic(topic);
+                let articlesPerTopic = {};
+                articlesPerTopic[topic] = article;
+                articles.push(articlesPerTopic);
+                
+            }
+
+            res.status(200).send(articles);
+
+        }else{
+            res.status(404).send({message: init.message.database.userNotFound})
         }
+    }).catch((error) => {
+        res.status(error.code).send({message: error.message})
+    });
 
-        res.status(200).send(articles);
-
-    }else{
-        res.status(404).send({message: init.message.database.userNotFound})
-    }
     
 });
 

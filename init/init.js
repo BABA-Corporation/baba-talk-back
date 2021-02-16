@@ -3,7 +3,7 @@ module.exports = {
     ascii: {
         top: "//////////",
         body: " BABA-TALK-API ",
-        footer: "\\\\\\\\\\\\\\\\\\\\"
+        footer: "\\\\\\\\\\\\\\\\\\"
     },
     gnewsApi: {
         key: "1f229736b16047d9bd6a9ed1447bb200",
@@ -27,10 +27,14 @@ module.exports = {
             userSuccessfullySaved: "utilisateur enregistré avec succès",
             userSuccessfullyUpdated: "utilisateur modifié avec succès",
             userNotFound: "no user found",
+            userIdIncorrect: "incorrect user id",
             userAlreadyExist: "this mail address already exist in database",
             errorWhileSavingUser: "erreur lors de l'enregistrement en base de donnée",
             errorWhileUpdatingUser: "erreur lors de l'update en base de donnée"
         }
     },
+    database : {
+        url: "mongodb://chartPatternDetector:chartPatternDetectorTrad3A13rt@localhost:27018/strategy"
+    }
     
 }
