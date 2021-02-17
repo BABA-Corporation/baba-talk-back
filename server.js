@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use("/",cors({origin : "*.baba.epsi.best"}), router);
 
 const port = init.serverPort;
-app.set('port', process.env.PORT || port);
+app.set('port', 5004);
 
 databaseController.connect().then(() => {
 
